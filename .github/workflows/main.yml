@@ -25,10 +25,10 @@ jobs:
     - name: 安装依赖
       run: pip install -r requirements.txt
     
-    - name: 执行签到
+    - name: 执行任务
       env:
         API_ID: ${{ secrets.API_ID }}
         API_HASH: ${{ secrets.API_HASH }}
         SESSION_STRING: ${{ secrets.SESSION_STRING }}
-        SIGN_TARGETS: ${{ secrets.SIGN_TARGETS }}
+        SIGN_CONFIG: ${{ secrets.SIGN_CONFIG }}
       run: python main.py
