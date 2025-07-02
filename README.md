@@ -51,7 +51,7 @@
 ## 🔥 第二步：在线生成Session字符串
 
 ### 2.1 打开Google Colab
-访问：[Google Colab](https://colab.research.google.com/drive/1WlFEL46tLWgeZmr2_HE0e3bAzZ3WQztz?usp=sharing)
+访问：[生成SESSION_STRING](https://colab.research.google.com/drive/1WlFEL46tLWgeZmr2_HE0e3bAzZ3WQztz?usp=sharing)
 
 ### 2.2 执行代码
 1. 点击运行按钮 ▶️
