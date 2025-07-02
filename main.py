@@ -1,6 +1,7 @@
 import asyncio
 import os
 import logging
+import json
 from datetime import datetime
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -14,9 +15,34 @@ async def auto_sign():
     API_ID = int(os.getenv('API_ID'))
     API_HASH = os.getenv('API_HASH')
     SESSION_STRING = os.getenv('SESSION_STRING')
-    SIGN_TARGETS = os.getenv('SIGN_TARGETS', '').split(',')
     
-    logger.info(f"🚀 开始签到任务 - {datetime.now()}")
+    # 使用JSON格式配置
+    # SIGN_CONFIG格式: {"target1": "message1", "target2": "message2"}
+    SIGN_CONFIG = os.getenv('SIGN_CONFIG', '{}')
+    
+    logger.info(f"🚀 开始发送消息任务 - {datetime.now()}")
+    
+    # 解析JSON配置
+    try:
+        target_messages = json.loads(SIGN_CONFIG)
+        if not target_messages:
+            logger.error("❌ SIGN_CONFIG 配置为空，请设置签到目标")
+            return
+        logger.info("📋 使用JSON格式配置")
+            
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ JSON配置解析失败: {e}")
+        logger.error("💡 配置格式示例: '{\"@bot1\": \"/sign\", \"@bot2\": \"/checkin\"}'")
+        return
+    except Exception as e:
+        logger.error(f"❌ 配置解析失败: {e}")
+        return
+    
+    if not target_messages:
+        logger.error("❌ 没有找到有效的签到目标")
+        return
+    
+    logger.info(f"📝 配置的发送目标: {list(target_messages.keys())}")
     
     # 创建客户端
     client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
@@ -29,24 +55,21 @@ async def auto_sign():
         logger.info(f"✅ 登录成功: {me.first_name}")
         
         success_count = 0
+        total_count = len(target_messages)
         
         # 执行签到
-        for target in SIGN_TARGETS:
-            target = target.strip()
-            if not target:
-                continue
-                
+        for target, message in target_messages.items():
             try:
-                await client.send_message(target, '/sign')
-                logger.info(f"✅ 签到成功: {target}")
+                await client.send_message(target, message)
+                logger.info(f"✅ 发送成功: {target} -> {message}")
                 success_count += 1
             except Exception as e:
-                logger.error(f"❌ 签到失败 {target}: {e}")
+                logger.error(f"❌ 发送失败 {target}: {e}")
             
             # 延迟避免频率限制
             await asyncio.sleep(3)
         
-        logger.info(f"📊 签到完成: {success_count}/{len([t for t in SIGN_TARGETS if t.strip()])} 成功")
+        logger.info(f"📊 发送完成: {success_count}/{total_count} 成功")
         
     except Exception as e:
         logger.error(f"💥 程序错误: {e}")
