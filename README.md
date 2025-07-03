@@ -77,7 +77,7 @@
 | `API_ID` | 你的API ID | 从my.telegram.org获取 |
 | `API_HASH` | 你的API Hash | 从my.telegram.org获取 |
 | `SESSION_STRING` | 刚才生成的字符串 | Google Colab生成的长字符串 |
-| `SIGN_CONFIG` | `{"@checkin_bot": "/sign", "@daily_bot": "/checkin", "@reward_bot": "领取奖励", "username": "hello"}` | 目标和需要发送的消息，逗号分隔 |
+| `SIGN_CONFIG` | `{"@checkin_bot": "/sign", "@daily_bot": "/checkin", "@reward_bot": "领取奖励", "username": "hello"}` | 目标和需要发送的消息，逗号分隔(填你自己的，这只是样例) |
 
 ### 3.2 手动测试
 1. 进入仓库的"Actions"标签
